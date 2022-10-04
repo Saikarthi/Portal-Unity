@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float playerSpeed = 2.0f;
     [SerializeField] private float jumpHeight = 1.0f;
     [SerializeField] private float gravityValue = -9.81f;
+    [SerializeField] private float sensitivityX;
+    [SerializeField] private float sensitivityY;
+    [SerializeField] private float minimumY;
+    [SerializeField] private float maximumY;
     #endregion
     private void Awake()
     {
@@ -30,9 +34,16 @@ public class PlayerController : MonoBehaviour
     {
         
     }
-
+    float rotationY = 0F;
 
     void Update()
+    {
+        LookFunction();
+
+        Movement();
+    }
+
+    private void Movement()
     {
         groundedPlayer = controller.isGrounded;
 
@@ -57,5 +68,15 @@ public class PlayerController : MonoBehaviour
 
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
+    }
+
+    private void LookFunction()
+    {
+        float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
+
+        rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+        rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+
+        transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
     }
 }
