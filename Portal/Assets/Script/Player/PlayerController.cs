@@ -11,17 +11,25 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance;
 
     #region Input For Character Controller
+    [Header("Movement")]
     [SerializeField]private CharacterController controller;
-    private Vector3 playerVelocity;
-    private bool groundedPlayer;
     [SerializeField] private float playerSpeed = 2.0f;
     [SerializeField] private float jumpHeight = 1.0f;
     [SerializeField] private float gravityValue = -9.81f;
+    //mouse
+    [Header("Mouse")]
     [SerializeField] private float sensitivityX;
     [SerializeField] private float sensitivityY;
     [SerializeField] private float minimumY;
     [SerializeField] private float maximumY;
     #endregion
+
+
+    [HideInInspector]public Vector2 IHorizontalMovement;
+    [HideInInspector]public bool IJump;
+
+    [HideInInspector] public float IMouseX ;
+    [HideInInspector] public float IMouseY ;
     private void Awake()
     {
         if (Instance == null)
@@ -34,7 +42,6 @@ public class PlayerController : MonoBehaviour
     {
         
     }
-    float rotationY = 0F;
 
     void Update()
     {
@@ -43,40 +50,54 @@ public class PlayerController : MonoBehaviour
         Movement();
     }
 
+    Vector3 TempMovement;
+    Vector3 VecticalMovement = Vector3.zero; //Manaual gravity
+    private bool groundedPlayer;
+    float rotationY = 0F;
+    private float xRotation;
+    private float yRotation;
+
     private void Movement()
     {
         groundedPlayer = controller.isGrounded;
-
-        if (groundedPlayer && playerVelocity.y < 0)
+        if (groundedPlayer)
         {
-            playerVelocity.y = 0f;
+            VecticalMovement.y = 0;
         }
+        //movement
+        TempMovement = (transform.right * IHorizontalMovement.x + transform.forward * IHorizontalMovement.y) * playerSpeed;
+        controller.Move(TempMovement*Time.deltaTime);
 
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        controller.Move(move * Time.deltaTime * playerSpeed);
-
-        if (move != Vector3.zero)
+        if(IJump && groundedPlayer) 
         {
-            gameObject.transform.forward = move;
+            VecticalMovement.y = Mathf.Sqrt(-2f * jumpHeight * gravityValue);
+            IJump = false;
         }
-
-        // Changes the height position of the player..
-        if (Input.GetButtonDown("Jump") && groundedPlayer)
-        {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-        }
-
-        playerVelocity.y += gravityValue * Time.deltaTime;
-        controller.Move(playerVelocity * Time.deltaTime);
+        //gravity
+        VecticalMovement.y += gravityValue * Time.deltaTime; 
+        controller.Move(VecticalMovement * Time.deltaTime);
     }
 
     private void LookFunction()
     {
-        float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
+        Debug.Log("test: " + IMouseX + "," + IMouseY);
 
-        rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
-        rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+        //float rotationX = transform.localEulerAngles.y + IMouseX * sensitivityX * Time.deltaTime;
 
-        transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
+        //rotationY += IMouseY * sensitivityY * Time.deltaTime;
+        //rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+
+        //transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
+
+
+        //transform.Rotate(Vector3.up, IMouseX * Time.deltaTime);
+
+        yRotation += IMouseX; 
+        xRotation -= IMouseY; 
+        xRotation = Mathf.Clamp(xRotation, minimumY, minimumY); 
+        Vector3 targetRotation = transform.eulerAngles;
+        targetRotation.x = xRotation;
+        targetRotation.y = yRotation;
+        transform.eulerAngles = targetRotation;
     }
 }
