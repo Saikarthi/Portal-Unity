@@ -62,6 +62,15 @@ public partial class @PlayerControl : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""8d8f4c78-be8a-4e2b-ab10-bc3f2ac444b1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +161,17 @@ public partial class @PlayerControl : IInputActionCollection2, IDisposable
                     ""action"": ""MouseY"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c1b2f53-135b-42bd-9fed-f61592c4d8c6"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -164,6 +184,7 @@ public partial class @PlayerControl : IInputActionCollection2, IDisposable
         m_MovementAction_Jump = m_MovementAction.FindAction("Jump", throwIfNotFound: true);
         m_MovementAction_MouseX = m_MovementAction.FindAction("MouseX", throwIfNotFound: true);
         m_MovementAction_MouseY = m_MovementAction.FindAction("MouseY", throwIfNotFound: true);
+        m_MovementAction_Sprint = m_MovementAction.FindAction("Sprint", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -227,6 +248,7 @@ public partial class @PlayerControl : IInputActionCollection2, IDisposable
     private readonly InputAction m_MovementAction_Jump;
     private readonly InputAction m_MovementAction_MouseX;
     private readonly InputAction m_MovementAction_MouseY;
+    private readonly InputAction m_MovementAction_Sprint;
     public struct MovementActionActions
     {
         private @PlayerControl m_Wrapper;
@@ -235,6 +257,7 @@ public partial class @PlayerControl : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_MovementAction_Jump;
         public InputAction @MouseX => m_Wrapper.m_MovementAction_MouseX;
         public InputAction @MouseY => m_Wrapper.m_MovementAction_MouseY;
+        public InputAction @Sprint => m_Wrapper.m_MovementAction_Sprint;
         public InputActionMap Get() { return m_Wrapper.m_MovementAction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -256,6 +279,9 @@ public partial class @PlayerControl : IInputActionCollection2, IDisposable
                 @MouseY.started -= m_Wrapper.m_MovementActionActionsCallbackInterface.OnMouseY;
                 @MouseY.performed -= m_Wrapper.m_MovementActionActionsCallbackInterface.OnMouseY;
                 @MouseY.canceled -= m_Wrapper.m_MovementActionActionsCallbackInterface.OnMouseY;
+                @Sprint.started -= m_Wrapper.m_MovementActionActionsCallbackInterface.OnSprint;
+                @Sprint.performed -= m_Wrapper.m_MovementActionActionsCallbackInterface.OnSprint;
+                @Sprint.canceled -= m_Wrapper.m_MovementActionActionsCallbackInterface.OnSprint;
             }
             m_Wrapper.m_MovementActionActionsCallbackInterface = instance;
             if (instance != null)
@@ -272,6 +298,9 @@ public partial class @PlayerControl : IInputActionCollection2, IDisposable
                 @MouseY.started += instance.OnMouseY;
                 @MouseY.performed += instance.OnMouseY;
                 @MouseY.canceled += instance.OnMouseY;
+                @Sprint.started += instance.OnSprint;
+                @Sprint.performed += instance.OnSprint;
+                @Sprint.canceled += instance.OnSprint;
             }
         }
     }
@@ -282,5 +311,6 @@ public partial class @PlayerControl : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnMouseX(InputAction.CallbackContext context);
         void OnMouseY(InputAction.CallbackContext context);
+        void OnSprint(InputAction.CallbackContext context);
     }
 }

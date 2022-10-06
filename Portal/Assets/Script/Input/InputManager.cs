@@ -19,6 +19,7 @@ public class InputManager : MonoBehaviour
         playerControl = new PlayerControl();
         playerControl.MovementAction.Movement.performed += wasdClicked;
         playerControl.MovementAction.Jump.performed += jumpClicked;
+        playerControl.MovementAction.Sprint.performed += SprintClicked;
 
         playerControl.MovementAction.MouseX.performed += MouseXClicked;
         playerControl.MovementAction.MouseY.performed += MouseYClicked;
@@ -31,6 +32,11 @@ public class InputManager : MonoBehaviour
     private void jumpClicked(InputAction.CallbackContext obj)
     {
         playerController.IJump = true;
+    }
+    
+    private void SprintClicked(InputAction.CallbackContext obj)
+    {
+        playerController.ISprint = obj.ReadValueAsButton();
     }
 
     private void MouseXClicked(InputAction.CallbackContext obj)
