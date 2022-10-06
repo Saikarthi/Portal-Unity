@@ -11626,11 +11626,11 @@ MonoBehaviour:
     Pos: {x: -0.0585, y: 0.2573, z: 0.027}
     Rot: {x: -0.5035011, y: 0.47412822, z: 0.55637884, w: 0.46057737}
   controller: {fileID: 5866666021308405122}
-  playerSpeed: 2
+  playerSpeed: 5
   jumpHeight: 3.5
   gravityValue: -20
-  sensitivityX: 5
-  sensitivityY: 5
+  sensitivityX: 10
+  sensitivityY: 10
   minimumY: -88
   maximumY: 88
   IHorizontalMovement: {x: 0, y: 0}

@@ -47,7 +47,7 @@ public partial class @PlayerControl : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""MouseX"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""266488a5-c5bd-46f7-af0f-a64248988968"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -56,7 +56,7 @@ public partial class @PlayerControl : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""MouseY"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""89914a22-950d-49cb-bac5-3cc4df555da2"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",

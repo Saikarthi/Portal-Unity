@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
 
     #region Input For Character Controller
     [Header("Movement")]
-    [SerializeField]private CharacterController controller;
+    [SerializeField] private CharacterController controller;
     [SerializeField] private float playerSpeed = 2.0f;
     [SerializeField] private float jumpHeight = 1.0f;
     [SerializeField] private float gravityValue = -9.81f;
@@ -52,10 +52,10 @@ public class PlayerController : MonoBehaviour
 
     Vector3 TempMovement;
     Vector3 VecticalMovement = Vector3.zero; //Manaual gravity
-    private bool groundedPlayer;
+    bool groundedPlayer;
     float rotationY = 0F;
-    private float xRotation;
-    private float yRotation;
+    float rotationX;
+
 
     private void Movement()
     {
@@ -77,27 +77,11 @@ public class PlayerController : MonoBehaviour
         VecticalMovement.y += gravityValue * Time.deltaTime; 
         controller.Move(VecticalMovement * Time.deltaTime);
     }
-
     private void LookFunction()
     {
-        Debug.Log("test: " + IMouseX + "," + IMouseY);
-
-        //float rotationX = transform.localEulerAngles.y + IMouseX * sensitivityX * Time.deltaTime;
-
-        //rotationY += IMouseY * sensitivityY * Time.deltaTime;
-        //rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
-
-        //transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
-
-
-        //transform.Rotate(Vector3.up, IMouseX * Time.deltaTime);
-
-        yRotation += IMouseX; 
-        xRotation -= IMouseY; 
-        xRotation = Mathf.Clamp(xRotation, minimumY, minimumY); 
-        Vector3 targetRotation = transform.eulerAngles;
-        targetRotation.x = xRotation;
-        targetRotation.y = yRotation;
-        transform.eulerAngles = targetRotation;
+        rotationX = transform.localEulerAngles.y + IMouseX * sensitivityX * Time.deltaTime;
+        rotationY += IMouseY * sensitivityY * Time.deltaTime;
+        rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
+        transform.localRotation = Quaternion.AngleAxis(rotationX, Vector3.up) * Quaternion.AngleAxis(rotationY, Vector3.left);
     }
 }
